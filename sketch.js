@@ -1,8 +1,15 @@
+let mic, amp;
 let spheres = [];
 let numSpheres = 200;
+let easycam;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  createCanvas(720, 1080, WEBGL);
+  mic = new p5.AudioIn();
+  mic.start();
+  amp = new p5.Amplitude();
+  amp.setInput(mic);
+  easycam = createEasyCam();
   angleMode(DEGREES);
   noStroke();
 
@@ -20,8 +27,6 @@ function setup() {
 
 function draw() {
   background(0);
-  rotateX(frameCount * 0.01);
-  rotateY(frameCount * 0.01);
 
   ambientLight(60);
   pointLight(255, 255, 255, 0, 0, 0);
@@ -54,6 +59,9 @@ function draw() {
   }
   noStroke();
 
+  let level = amp.getLevel();
+  let scaleFactor = map(level, 0, 0.3, 0.8, 2);
+
   for (let s of spheres) {
     push();
     let angle = frameCount * s.speed + s.angle;
@@ -63,11 +71,7 @@ function draw() {
 
     translate(x, y, z);
     ambientMaterial(...s.color);
-    sphere(s.size);
+    sphere(s.size * scaleFactor);
     pop();
   }
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
 }

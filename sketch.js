@@ -1,6 +1,6 @@
 let mic, amp;
 let spheres = [];
-let numSpheres = 200;
+let numSpheres = 100;
 let easycam;
 
 function setup() {
@@ -16,11 +16,11 @@ function setup() {
   for (let i = 0; i < numSpheres; i++) {
     spheres.push({
       radius: random(100, 400),
-      size: random(4, 20),
+      size: random(6, 24),
       speed: random(0.1, 1),
       angle: random(360),
       axis: p5.Vector.random3D(),
-      color: [random(100, 255), random(100, 255), random(100, 255)],
+      color: [random(150, 255), random(150, 255), random(200, 255)],
     });
   }
 }
@@ -28,14 +28,14 @@ function setup() {
 function draw() {
   background(0);
 
-  ambientLight(60);
-  pointLight(255, 255, 255, 0, 0, 0);
+  ambientLight(80, 80, 100);
+  directionalLight(255, 255, 255, -0.5, -1, -0.3);
 
   // Draw sacred geometry-like connecting lines
   stroke(255, 50);
   noFill();
   for (let i = 0; i < spheres.length; i++) {
-    for (let j = i + 1; j < spheres.length; j++) {
+    for (let j = i + 1; j < Math.min(i + 20, spheres.length); j++) {
       let si = spheres[i];
       let sj = spheres[j];
 
@@ -52,7 +52,7 @@ function draw() {
 
       // Connect spheres within a certain distance
       let d = dist(xi, yi, zi, xj, yj, zj);
-      if (d < 150) {
+      if (d < 250) {
         line(xi, yi, zi, xj, yj, zj);
       }
     }
